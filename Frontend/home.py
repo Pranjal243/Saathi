@@ -7,7 +7,7 @@ import io
 # Speech-to-text function
 def transcribe_audio():
     recognizer = sr.Recognizer()
-    with sr.Microphone(device_index=5) as source:
+    with sr.Microphone(device_index=0) as source:
         st.info("Listening... Speak now.")
         try:
             audio = recognizer.listen(source, timeout=5)

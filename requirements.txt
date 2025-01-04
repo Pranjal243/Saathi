@@ -1,0 +1,7 @@
+streamlit
+SpeechRecognition
+gtts
+cohere
+serpapi
+transformers
+translatepy
