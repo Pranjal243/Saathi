@@ -51,7 +51,7 @@ def chat(question_eng):
         response.raise_for_status()  # Raise an exception for 4xx or 5xx responses
         return response.json()  # Return the JSON response from the API
     except requests.exceptions.RequestException as e:
-        return {"error": f"API request failed: {e}"}
+        return {"answer": f"API request failed: {e}"}
 
 # Function to generate audio
 def generate_audio(text):
