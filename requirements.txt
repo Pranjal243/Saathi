@@ -1,3 +1,4 @@
+flask
 streamlit
 SpeechRecognition
 gtts
@@ -5,3 +6,4 @@ cohere
 serpapi
 transformers
 translatepy
+pyaudio
