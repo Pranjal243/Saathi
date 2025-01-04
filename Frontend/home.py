@@ -7,16 +7,23 @@ import io
 # Speech-to-text function
 def transcribe_audio():
     recognizer = sr.Recognizer()
-    with sr.Microphone(device_index=0) as source:
-        st.info("Listening... Speak now.")
-        try:
-            audio = recognizer.listen(source, timeout=5)
-            text = recognizer.recognize_google(audio,language='ne-NP')
-            return text
-        except sr.UnknownValueError:
-            return "Sorry, I could not understand that."
-        except sr.RequestError as e:
-            return f"Error: {e}"
+    audio = st.audio_input("Record a voice message")
+    if audio is not None:
+            print("Audio coming")
+            st.audio(audio)
+            audio_bytes = audio.read()
+            audio_file = io.BytesIO(audio_bytes)  # Create a BytesIO object from the audio bytes
+            with sr.AudioFile(audio_file) as source:
+                audio_data = recognizer.record(source)
+            try:
+                text = recognizer.recognize_google(audio_data,language='ne-NP')
+                return text
+            except sr.UnknownValueError:
+                return "Sorry, I could not understand that."
+            except sr.RequestError as e:
+                return f"Error: {e}"
+    else:
+        print("audio-data is not coming")
         
 #translate question to english
 def translate(question,src,target):
@@ -64,18 +71,17 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Input: Voice button
-if st.button("🎙️ Tap to Speak"):
-    question = transcribe_audio()
-    if question:
-        st.session_state.messages.append({"user": True, "text": question})
-        answer = chat(question)
-        print(answer)
-        response = f"{answer['answer']}"
-        st.session_state.messages.append({"user": False, "text": response})
+question = transcribe_audio()
+if question:
+    st.session_state.messages.append({"user": True, "text": question})
+    answer = chat(question)
+    print(answer)
+    response = f"{answer['answer']}"
+    st.session_state.messages.append({"user": False, "text": response})
 
-        # Play the audio file
-        # audio_file = generate_audio(answer_org['data'])
-        # st.audio(audio_file, format="audio/mp3")
+    # Play the audio file
+    # audio_file = generate_audio(answer_org['data'])
+    # st.audio(audio_file, format="audio/mp3")
 
 for msg in st.session_state.messages:
     if msg["user"]:
